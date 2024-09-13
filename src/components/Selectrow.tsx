@@ -11,8 +11,9 @@ const Selectrow: React.FC<SelectRowProps> = ({ onSelectRows }) => {
 
   const handleSelect = () => {
     const numericValue = Number(inputValue); // Convert string to number
+    // Call the parent function with the numeric value
     if (!isNaN(numericValue)) {
-      onSelectRows(numericValue); // Call the parent function with the numeric value
+      onSelectRows(numericValue); 
     }
     op.current?.hide(); // Hide the OverlayPanel after selection
   };
@@ -47,14 +48,11 @@ const Selectrow: React.FC<SelectRowProps> = ({ onSelectRows }) => {
           }}
         >
           <input
-            type="text"
-            value={inputValue}
-            onChange={handleChange} // Update input value
-          />
+            type="text" value={inputValue} onChange={handleChange}/>
+          
           <button
             style={{ width: "80%", padding: "5px", textAlign: "center" }}
-            onClick={handleSelect} // Trigger the selection
-          >
+            onClick={handleSelect}>
             Enter to select
           </button>
         </div>

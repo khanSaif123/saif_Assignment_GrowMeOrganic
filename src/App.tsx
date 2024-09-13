@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { getData } from './AJAX/GetData';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -82,25 +82,31 @@ function App() {
   };
 
   const handleSelectRows = async (count: number) => {
-    const rowsToSelect = [...selectedProducts];  // Start with already selected rows
-    let rowsNeeded = count - rowsToSelect.length;  // Calculate how many rows to fetch
-
-    // Fetch more pages until we have the required number of rows selected
-    let currentPage = page;
-    while (rowsNeeded > 0) {
-      const result = await getData(currentPage);
-      const currentPageData = result.data;
-
-      // Select rows from the current page
-      const rowsFromPage = currentPageData.slice(0, rowsNeeded);  // Select only needed number of rows
-      rowsToSelect.push(...rowsFromPage);
-
-      rowsNeeded -= rowsFromPage.length;  // Decrease the remaining rows needed
-      currentPage += 1;  // Move to the next page
+    let rowsToSelect = [...selectedProducts]; // Start with already selected rows
+    let rowsNeeded = count - rowsToSelect.length; // Calculate how many rows to fetch
+  
+    if (rowsNeeded < 0) {
+      // If we need to reduce the selection
+      rowsToSelect = rowsToSelect.slice(0, count); // Keep only the required number of rows
+    } else {
+      // If we need to increase the selection
+      let currentPage = page;
+  
+      while (rowsNeeded > 0) {
+        const result = await getData(currentPage);
+        const currentPageData = result.data;
+  
+        const rowsFromPage = currentPageData.slice(0, rowsNeeded); // Select only needed number of rows
+        rowsToSelect.push(...rowsFromPage); // Add new rows to selection
+  
+        rowsNeeded -= rowsFromPage.length; // Decrease the remaining rows needed
+        currentPage += 1; // Move to the next page
+      }
     }
-
-    setSelectedProducts([...new Set(rowsToSelect)]);  // Update global selected rows, ensuring uniqueness
+  
+    setSelectedProducts([...new Set(rowsToSelect)]); // Update global selected rows, ensuring uniqueness
   };
+  
 
   return (
     <>
