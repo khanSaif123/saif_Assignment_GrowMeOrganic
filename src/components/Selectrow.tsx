@@ -21,7 +21,7 @@ const Selectrow: React.FC<SelectRowProps> = ({ onSelectRows }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     // Allow only numeric values and empty string
-    if (/^\d*$/.test(value)) {
+    if (value) {
       setInputValue(value);
     }
   };

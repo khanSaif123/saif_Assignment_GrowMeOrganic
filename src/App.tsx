@@ -82,15 +82,20 @@ function App() {
   };
 
   const handleSelectRows = async (count: number) => {
+    
     let rowsToSelect = [...selectedProducts]; // Start with already selected rows
     let rowsNeeded = count - rowsToSelect.length; // Calculate how many rows to fetch
-  
+
+
     if (rowsNeeded < 0) {
       // If we need to reduce the selection
       rowsToSelect = rowsToSelect.slice(0, count); // Keep only the required number of rows
-    } else {
+    }
+
+    else {
       // If we need to increase the selection
       let currentPage = page;
+      console.log(currentPage)
   
       while (rowsNeeded > 0) {
         const result = await getData(currentPage);
